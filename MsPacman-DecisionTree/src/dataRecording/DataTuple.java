@@ -28,7 +28,6 @@ public class DataTuple {
 	public Constants.STRATEGY strategy;
 
 	public MOVE DirectionChosen;
-
 	// General game state this - not normalized!
 	public int mazeIndex;
 	public int currentLevel;
@@ -70,7 +69,6 @@ public class DataTuple {
 		this.strategy = game.strategy;
 
 		this.DirectionChosen = move;
-
 		this.mazeIndex = game.getMazeIndex();
 		this.currentLevel = game.getCurrentLevel();
 		this.pacmanPosition = game.getPacmanCurrentNodeIndex();
@@ -115,8 +113,8 @@ public class DataTuple {
 		String[] dataSplit = data.split(";");
 
 		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
-		this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
 
+		this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
 		this.mazeIndex = Integer.parseInt(dataSplit[2]);
 		this.currentLevel = Integer.parseInt(dataSplit[3]);
 		this.pacmanPosition = Integer.parseInt(dataSplit[4]);
@@ -147,6 +145,7 @@ public class DataTuple {
 		StringBuilder stringbuilder = new StringBuilder();
 
 		stringbuilder.append(this.strategy + ";");
+
 		stringbuilder.append(this.DirectionChosen + ";");
 		stringbuilder.append(this.mazeIndex + ";");
 		stringbuilder.append(this.currentLevel + ";");
