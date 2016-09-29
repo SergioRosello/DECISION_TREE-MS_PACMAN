@@ -25,6 +25,8 @@ public class DataTuple {
 		}
 	}
 
+	public Constants.STRATEGY strategy;
+
 	public MOVE DirectionChosen;
 
 	// General game state this - not normalized!
@@ -64,6 +66,8 @@ public class DataTuple {
 		if (move == MOVE.NEUTRAL) {
 			move = game.getPacmanLastMoveMade();
 		}
+
+		this.strategy = game.strategy;
 
 		this.DirectionChosen = move;
 
@@ -110,37 +114,39 @@ public class DataTuple {
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
 
-		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
+		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
+		this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
 
-		this.mazeIndex = Integer.parseInt(dataSplit[1]);
-		this.currentLevel = Integer.parseInt(dataSplit[2]);
-		this.pacmanPosition = Integer.parseInt(dataSplit[3]);
-		this.pacmanLivesLeft = Integer.parseInt(dataSplit[4]);
-		this.currentScore = Integer.parseInt(dataSplit[5]);
-		this.totalGameTime = Integer.parseInt(dataSplit[6]);
-		this.currentLevelTime = Integer.parseInt(dataSplit[7]);
-		this.numOfPillsLeft = Integer.parseInt(dataSplit[8]);
-		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[9]);
-		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
-		this.isInkyEdible = Boolean.parseBoolean(dataSplit[11]);
-		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[12]);
-		this.isSueEdible = Boolean.parseBoolean(dataSplit[13]);
-		this.blinkyDist = Integer.parseInt(dataSplit[14]);
-		this.inkyDist = Integer.parseInt(dataSplit[15]);
-		this.pinkyDist = Integer.parseInt(dataSplit[16]);
-		this.sueDist = Integer.parseInt(dataSplit[17]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[18]);
-		this.inkyDir = MOVE.valueOf(dataSplit[19]);
-		this.pinkyDir = MOVE.valueOf(dataSplit[20]);
-		this.sueDir = MOVE.valueOf(dataSplit[21]);
-		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
-		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
-		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
+		this.mazeIndex = Integer.parseInt(dataSplit[2]);
+		this.currentLevel = Integer.parseInt(dataSplit[3]);
+		this.pacmanPosition = Integer.parseInt(dataSplit[4]);
+		this.pacmanLivesLeft = Integer.parseInt(dataSplit[5]);
+		this.currentScore = Integer.parseInt(dataSplit[6]);
+		this.totalGameTime = Integer.parseInt(dataSplit[7]);
+		this.currentLevelTime = Integer.parseInt(dataSplit[8]);
+		this.numOfPillsLeft = Integer.parseInt(dataSplit[9]);
+		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[10]);
+		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[11]);
+		this.isInkyEdible = Boolean.parseBoolean(dataSplit[12]);
+		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[13]);
+		this.isSueEdible = Boolean.parseBoolean(dataSplit[14]);
+		this.blinkyDist = Integer.parseInt(dataSplit[15]);
+		this.inkyDist = Integer.parseInt(dataSplit[16]);
+		this.pinkyDist = Integer.parseInt(dataSplit[17]);
+		this.sueDist = Integer.parseInt(dataSplit[18]);
+		this.blinkyDir = MOVE.valueOf(dataSplit[19]);
+		this.inkyDir = MOVE.valueOf(dataSplit[20]);
+		this.pinkyDir = MOVE.valueOf(dataSplit[21]);
+		this.sueDir = MOVE.valueOf(dataSplit[22]);
+		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[23]);
+		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[24]);
+		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[25]);
 	}
 
 	public String getSaveString() {
 		StringBuilder stringbuilder = new StringBuilder();
 
+		stringbuilder.append(this.strategy + ";");
 		stringbuilder.append(this.DirectionChosen + ";");
 		stringbuilder.append(this.mazeIndex + ";");
 		stringbuilder.append(this.currentLevel + ";");
@@ -264,4 +270,12 @@ public class DataTuple {
 		return DiscreteTag.DiscretizeDouble(aux);
 	}
 
+	public String discretize(String attrName) {
+		switch (attrName) {
+			case "Strategy":
+				return strategy.toString();
+			default:
+				return "None";
+		}
+	}
 }
