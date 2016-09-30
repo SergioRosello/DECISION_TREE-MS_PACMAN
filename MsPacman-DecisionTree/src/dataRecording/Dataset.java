@@ -25,5 +25,13 @@ public class Dataset {
 
         return subDataset;
     }
+
     // Contar el numero de veces que aparece la tupla con el mismo valor
+    public int appearsXTimes(ArrayList<DataTuple> data){
+        int numberOfTimes = 0;
+        for(DataTuple tuple : data){
+            numberOfTimes++;
+        }
+        return numberOfTimes;
+    }
 }
