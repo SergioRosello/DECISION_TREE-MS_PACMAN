@@ -114,31 +114,31 @@ public class DataTuple {
 
 		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
 
-		this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
+		/*this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
 		this.mazeIndex = Integer.parseInt(dataSplit[2]);
 		this.currentLevel = Integer.parseInt(dataSplit[3]);
 		this.pacmanPosition = Integer.parseInt(dataSplit[4]);
 		this.pacmanLivesLeft = Integer.parseInt(dataSplit[5]);
 		this.currentScore = Integer.parseInt(dataSplit[6]);
 		this.totalGameTime = Integer.parseInt(dataSplit[7]);
-		this.currentLevelTime = Integer.parseInt(dataSplit[8]);
-		this.numOfPillsLeft = Integer.parseInt(dataSplit[9]);
-		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[10]);
-		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[11]);
-		this.isInkyEdible = Boolean.parseBoolean(dataSplit[12]);
-		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[13]);
-		this.isSueEdible = Boolean.parseBoolean(dataSplit[14]);
-		this.blinkyDist = Integer.parseInt(dataSplit[15]);
-		this.inkyDist = Integer.parseInt(dataSplit[16]);
-		this.pinkyDist = Integer.parseInt(dataSplit[17]);
-		this.sueDist = Integer.parseInt(dataSplit[18]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[19]);
+		this.currentLevelTime = Integer.parseInt(dataSplit[8]);*/
+		this.numOfPillsLeft = Integer.parseInt(dataSplit[1]);
+		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[2]);
+		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[3]);
+		this.isInkyEdible = Boolean.parseBoolean(dataSplit[4]);
+		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[5]);
+		this.isSueEdible = Boolean.parseBoolean(dataSplit[6]);
+		this.blinkyDist = Integer.parseInt(dataSplit[7]);
+		this.inkyDist = Integer.parseInt(dataSplit[8]);
+		this.pinkyDist = Integer.parseInt(dataSplit[9]);
+		this.sueDist = Integer.parseInt(dataSplit[10]);
+		/*this.blinkyDir = MOVE.valueOf(dataSplit[19]);
 		this.inkyDir = MOVE.valueOf(dataSplit[20]);
 		this.pinkyDir = MOVE.valueOf(dataSplit[21]);
 		this.sueDir = MOVE.valueOf(dataSplit[22]);
 		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[23]);
 		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[24]);
-		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[25]);
+		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[25]);*/
 	}
 
 	public String getSaveString() {
@@ -146,14 +146,14 @@ public class DataTuple {
 
 		stringbuilder.append(this.strategy + ";");
 
-		stringbuilder.append(this.DirectionChosen + ";");
-		stringbuilder.append(this.mazeIndex + ";");
-		stringbuilder.append(this.currentLevel + ";");
-		stringbuilder.append(this.pacmanPosition + ";");
-		stringbuilder.append(this.pacmanLivesLeft + ";");
-		stringbuilder.append(this.currentScore + ";");
-		stringbuilder.append(this.totalGameTime + ";");
-		stringbuilder.append(this.currentLevelTime + ";");
+		//stringbuilder.append(this.DirectionChosen + ";");
+		//stringbuilder.append(this.mazeIndex + ";");
+		//stringbuilder.append(this.currentLevel + ";");
+		//stringbuilder.append(this.pacmanPosition + ";");
+		//stringbuilder.append(this.pacmanLivesLeft + ";");
+		//stringbuilder.append(this.currentScore + ";");
+		//stringbuilder.append(this.totalGameTime + ";");
+		//stringbuilder.append(this.currentLevelTime + ";");
 		stringbuilder.append(this.numOfPillsLeft + ";");
 		stringbuilder.append(this.numOfPowerPillsLeft + ";");
 		stringbuilder.append(this.isBlinkyEdible + ";");
@@ -164,13 +164,13 @@ public class DataTuple {
 		stringbuilder.append(this.inkyDist + ";");
 		stringbuilder.append(this.pinkyDist + ";");
 		stringbuilder.append(this.sueDist + ";");
-		stringbuilder.append(this.blinkyDir + ";");
-		stringbuilder.append(this.inkyDir + ";");
-		stringbuilder.append(this.pinkyDir + ";");
-		stringbuilder.append(this.sueDir + ";");
-		stringbuilder.append(this.numberOfNodesInLevel + ";");
-		stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
-		stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
+		//stringbuilder.append(this.blinkyDir + ";");
+		//stringbuilder.append(this.inkyDir + ";");
+		//stringbuilder.append(this.pinkyDir + ";");
+		//stringbuilder.append(this.sueDir + ";");
+		//stringbuilder.append(this.numberOfNodesInLevel + ";");
+		//stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
+		//stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
 
 		return stringbuilder.toString();
 	}

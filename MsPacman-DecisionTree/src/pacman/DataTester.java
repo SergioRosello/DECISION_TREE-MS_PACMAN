@@ -3,10 +3,12 @@ package pacman;
 import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 
+import java.util.ArrayList;
+
 public class DataTester {
 
 	public static void main(String... args) {
-		DataTuple[] tuples = DataSaverLoader.LoadPacManData();
+		ArrayList<DataTuple> tuples = DataSaverLoader.LoadPacManData();
 		int counter = 0;
 		for (DataTuple d : tuples) {
 			System.out.println("Normal: "+d.getSaveString());

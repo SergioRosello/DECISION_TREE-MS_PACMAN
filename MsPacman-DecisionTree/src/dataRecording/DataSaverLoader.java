@@ -2,6 +2,9 @@ package dataRecording;
 
 import pacman.game.util.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * This class uses the IO class in the PacMan framework to do the actual saving/loading of
  * training data.
@@ -17,7 +20,7 @@ public class DataSaverLoader {
 		IO.saveFile(FileName, data.getSaveString(), true);
 	}
 	
-	public static DataTuple[] LoadPacManData()
+	public static ArrayList<DataTuple> LoadPacManData()
 	{
 		String data = IO.loadFile(FileName);
 		String[] dataLine = data.split("\n");
@@ -28,6 +31,6 @@ public class DataSaverLoader {
 			dataTuples[i] = new DataTuple(dataLine[i]);
 		}
 		
-		return dataTuples;
+		return new ArrayList<DataTuple>(Arrays.asList(dataTuples));
 	}
 }
