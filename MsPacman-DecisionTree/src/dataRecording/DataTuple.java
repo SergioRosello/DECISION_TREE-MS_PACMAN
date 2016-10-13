@@ -6,6 +6,9 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class DataTuple {
 
 	public enum DiscreteTag {
@@ -24,6 +27,8 @@ public class DataTuple {
 				return DiscreteTag.VERY_HIGH;
 		}
 	}
+
+    HashMap<String, String> hash;
 
 	public Constants.STRATEGY strategy;
 
@@ -208,6 +213,10 @@ public class DataTuple {
 		return DiscreteTag.DiscretizeDouble(aux);
 	}
 
+    public String discretizeBoolean(boolean value) {
+        return value ? "true" : "false";
+    }
+
 	public double normalizeBoolean(boolean bool) {
 		if (bool) {
 			return 1.0;
@@ -271,10 +280,42 @@ public class DataTuple {
 
 	public String discretize(String attrName) {
 		switch (attrName) {
-			case "Strategy":
+			case "strategy":
 				return strategy.toString();
+            case "numOfPillsLeft":
+                return discretizeNumberOfPills(this.numOfPillsLeft).toString();
+            case "numOfPowerPillsLeft":
+                return discretizeNumberOfPowerPills(this.numOfPowerPillsLeft).toString();
+            case "isBlinkyEdible":
+                return discretizeBoolean(this.isBlinkyEdible);
+            case "isInkyEdible":
+                return discretizeBoolean(this.isInkyEdible);
+            case "isPinkyEdible":
+                return discretizeBoolean(this.isPinkyEdible);
+            case "isSueEdible":
+                return discretizeBoolean(this.isSueEdible);
+            case "blinkyDist":
+                return discretizeDistance(this.blinkyDist).toString();
+            case "inkyDist":
+                return discretizeDistance(this.inkyDist).toString();
+            case "pinkyDist":
+                return discretizeDistance(this.pinkyDist).toString();
+            case "sueDist":
+                return discretizeDistance(this.sueDist).toString();
 			default:
 				return "None";
 		}
+	}
+
+	public HashMap<String, String> getHash(){
+
+		if (this.hash == null) {
+            hash = new HashMap<>();
+            String[] attrs = {"strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible", "isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist"};
+            for (String attr : attrs) {
+                this.hash.put(attr, discretize(attr));
+            }
+        }
+        return hash;
 	}
 }

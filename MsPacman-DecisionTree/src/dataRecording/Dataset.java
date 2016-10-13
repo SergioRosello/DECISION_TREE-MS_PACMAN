@@ -30,7 +30,6 @@ public class Dataset {
                 newDataset.add(tuple);
             }
         }
-        fillAttributeHashMap();
         Dataset subDataset = new Dataset(newDataset);
 
         return subDataset;
@@ -38,21 +37,25 @@ public class Dataset {
 
 
     public void fillAttributeHashMap() {
-
-        if (attributesWithValuesAndCounts.containsKey("Attribute")) {
-            if (attributesWithValuesAndCounts.get("Attribute").containsKey("value")) {
-                Integer value = attributesWithValuesAndCounts.get("Attribute").get("value");
-                value++;
-            } else {
-                attributesWithValuesAndCounts.get("Attribute").put("value", 1);
+        // Attributte, value, countTimes;
+        for (DataTuple t: this.dataset) {
+            for (String attr: t.getHash().keySet()){
+                String value = t.getHash().get(attr);
+                if (attributesWithValuesAndCounts.containsKey(attr)) {
+                    if (attributesWithValuesAndCounts.get(attr).containsKey(value)) {
+                        Integer count = attributesWithValuesAndCounts.get(attr).get(value);
+                        count++;
+                        attributesWithValuesAndCounts.get(attr).put(value, count);
+                    } else {
+                        attributesWithValuesAndCounts.get(attr).put(value, 1);
+                    }
+                } else {
+                    attributesWithValuesAndCounts.put(attr, new HashMap<String, Integer>());
+                    attributesWithValuesAndCounts.get(attr).put(value, 1);
+                }
             }
-        } else {
-            attributesWithValuesAndCounts.put("Attribute", new HashMap<String, Integer>());
-            attributesWithValuesAndCounts.get("Attribute").put("value", 1);
         }
     }
-
-
 
     // Contar el numero de veces que aparece la tupla con el mismo valor
 
@@ -60,9 +63,8 @@ public class Dataset {
     // subDataset.getSubDataSetWithValue("asdas", "dadas");
 
     public static void main(String[] args) {
-        // Prints "Hello, World" to the terminal window.
-        System.out.println("Hello, World");
-
-        Dataset example = new Dataset(DataSaverLoader.LoadPacManData());
+        Dataset dataset = new Dataset(DataSaverLoader.LoadPacManData());
+        Dataset subdataset = dataset.getSubDataSetWithValue("blinkyDist", "HIGH");
+        System.out.println("Hey");
     }
 }
