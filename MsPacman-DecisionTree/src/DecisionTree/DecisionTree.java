@@ -1,6 +1,10 @@
 package DecisionTree;
+
+
+import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 import dataRecording.Dataset;
+import pacman.controllers.Controller;
 import pacman.game.Constants;
 
 import java.util.HashMap;
@@ -11,38 +15,48 @@ import java.util.List;
  */
 public class DecisionTree {
 
-    public String classDecisionTree;
+    private Node root;
+    private String classDecisionTree;
+    private Dataset dataset;
+    private List<String> listAttibutes;
 
     public DecisionTree() {
+
         classDecisionTree = "strategy";
+        dataset = new Dataset(DataSaverLoader.LoadPacManData());
+        listAttibutes = (List<String>) dataset.attributesWithValuesAndCounts.keySet();
+        listAttibutes.remove(classDecisionTree);
+    }
+
+    public void buildTree() {
+        root = generateTree(dataset, listAttibutes);
     }
 
 
     //Genera el arbol de decisiones según el dataset y la lista de atributos.
-    public Node generateTree(Dataset trainingData, List<String> attrList){
+    public Node generateTree(Dataset dataset, List<String> attrList){
 
-        //Creamos un Nodo.
-        Node node = new Node();
+        // 1. Se crea el nodo N.
+        Node node = null;
 
-        //2. Si las tuplas en dataset tienen todas la misma clase C, return N como un nodo hoja etiquetado con la clase C.
-        if(sameClass(trainingData)){
-            Node nodoADevolver = new Node(trainingData.dataset.get(0).strategy.toString());
-            return nodoADevolver;
+        // 2. Si las tuplas en D tienen todas la misma clase C, return N como un nodo hoja etiquetado con la clase C.
+        if(sameClass(dataset)){
+            node = new Node(dataset.dataset.get(0).strategy.toString());
+            return node;
         }
-        //Si la lista de atributos está vacia, devuelve N etiquetado como un nodo de la clase mayoritaria D. (el valor de la clase que más se repita)
+        // 3. En otro caso, si la lista de atributos está vacía, return N como un nodo hoja etiquetado con la clase mayoritaria en D.
         else if(attrList.isEmpty()){
-            HashMap<String, Integer> mapStrategy = trainingData.attributesWithValuesAndCounts.get(classDecisionTree);
-            List<String> valuesForStraytegy = (List<String>) mapStrategy.keySet();
-            String claseMayoritaria = "NONE";
-            int max = 0;
-            for(String value : valuesForStraytegy) {
-                if(max < mapStrategy.get(value)) {
-                    max = mapStrategy.get(value);
-                    claseMayoritaria = value;
-                }
-            }
-            Node nodoADevolver = new Node(claseMayoritaria);
-            return nodoADevolver;
+            String claseMayoritaria = getMayorityClass(dataset);
+            node = new Node(claseMayoritaria);
+            return node;
+        }
+        // 4. En otro caso:
+        else {
+            // 1. Aplicar el método de selección de atributos sobre los datos y la lista de atributos, para
+            // encontrar el mejor atributo actual A: S(D, lista de atributos) -> A.
+            SelectorAtributos selector = new ID3();
+            String mejorAtributo = selector.seleccionDeAtributos(dataset, attrList);
+
         }
         return null;
     }
@@ -57,8 +71,18 @@ public class DecisionTree {
         return true;
     }
 
-    //Función que calcula el mayor beneficio.
-    public String seleccionAtributos(){
-        return null;
+    private String getMayorityClass(Dataset D) {
+        HashMap<String, Integer> mapStrategy = D.attributesWithValuesAndCounts.get(classDecisionTree);
+        List<String> valuesForStraytegy = (List<String>) mapStrategy.keySet();
+        String claseMayoritaria = "NONE";
+        int max = 0;
+        for(String value : valuesForStraytegy) {
+            if(max < mapStrategy.get(value)) {
+                max = mapStrategy.get(value);
+                claseMayoritaria = value;
+            }
+        }
+
+        return claseMayoritaria;
     }
 }
