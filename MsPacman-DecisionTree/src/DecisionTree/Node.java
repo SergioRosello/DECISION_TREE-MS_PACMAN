@@ -7,5 +7,15 @@ public class Node {
     //Que va a tener el nodo de Java?
     //Para poder implementar nuestro subDataSet.
 
+    String clase;
+
+    public Node(){
+
+    }
+
+    public Node(String clase){
+        this.clase = clase;
+    }
+
     //Tenemos una lista de hijos:
 }

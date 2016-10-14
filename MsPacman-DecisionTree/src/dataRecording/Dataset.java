@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class Dataset {
     public ArrayList<DataTuple> dataset;
-    private HashMap<String, HashMap<String, Integer>> attributesWithValuesAndCounts;
+    public HashMap<String, HashMap<String, Integer>> attributesWithValuesAndCounts;
 
     public Dataset(ArrayList<DataTuple> data) {
         dataset = data;
