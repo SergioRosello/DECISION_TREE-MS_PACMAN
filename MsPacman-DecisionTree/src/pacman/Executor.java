@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Random;
 
+import DecisionTree.DecisionTree;
 import dataRecording.DataCollectorController;
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
@@ -89,7 +90,13 @@ public class Executor
         //exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
 
         //Executes game with a controller for pacman.
-        exec.runGameTimed(new DataCollectorController(new KillerPacman()) ,new StarterGhosts(),visual);
+        //exec.runGameTimed(new DataCollectorController(new KillerPacman()) ,new StarterGhosts(),visual);
+
+        DecisionTree decisionTree = new DecisionTree();
+        decisionTree.buildTree();
+
+        //exec.runGameTimed(decisionTree, new StarterGhosts(), visual);
+        exec.runGameTimed(new KillerPacman() ,new StarterGhosts(),visual);
 
     }
 

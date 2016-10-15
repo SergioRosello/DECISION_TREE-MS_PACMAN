@@ -5,7 +5,9 @@ import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 import dataRecording.Dataset;
 import pacman.controllers.Controller;
-import pacman.game.Constants;
+import pacman.game.Constants.STRATEGY;
+import pacman.game.Constants.MOVE;
+import pacman.game.Game;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
 /**
  * Created by ramonserranolopez on 6/10/16.
  */
-public class DecisionTree {
+public class DecisionTree extends Controller<MOVE> {
 
     private Node root;
     private String classDecisionTree;
@@ -26,6 +28,11 @@ public class DecisionTree {
         dataset = new Dataset(DataSaverLoader.LoadPacManData());
         listAttibutes = (List<String>) dataset.attributesWithValuesAndCounts.keySet();
         listAttibutes.remove(classDecisionTree);
+    }
+
+    @Override
+    public MOVE getMove(Game game, long timeDue) {
+        return null;
     }
 
     public void buildTree() {
@@ -62,7 +69,7 @@ public class DecisionTree {
     }
 
     private boolean sameClass (Dataset D) {
-        Constants.STRATEGY str = D.dataset.get(0).strategy;
+        STRATEGY str = D.dataset.get(0).strategy;
         for (DataTuple tuple : D.dataset) {
             if (tuple.strategy != str) {
                 return false;
