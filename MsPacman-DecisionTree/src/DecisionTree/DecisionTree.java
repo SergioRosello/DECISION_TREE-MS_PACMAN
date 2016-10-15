@@ -9,6 +9,7 @@ import pacman.game.Constants.STRATEGY;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class DecisionTree extends Controller<MOVE> {
 
         classDecisionTree = "strategy";
         dataset = new Dataset(DataSaverLoader.LoadPacManData());
-        listAttibutes = (List<String>) dataset.attributesWithValuesAndCounts.keySet();
+        listAttibutes = new ArrayList<String> (dataset.attributesWithValuesAndCounts.keySet());
         listAttibutes.remove(classDecisionTree);
     }
 
@@ -36,12 +37,12 @@ public class DecisionTree extends Controller<MOVE> {
     }
 
     public void buildTree() {
-        root = generateTree(dataset, listAttibutes);
+        root = generateTree(dataset, (ArrayList<String>) listAttibutes);
     }
 
 
     //Genera el arbol de decisiones según el dataset y la lista de atributos.
-    public Node generateTree(Dataset dataset, List<String> attrList){
+    public Node generateTree(Dataset dataset, ArrayList<String> attrList){
 
         // 1. Se crea el nodo N.
         Node node = null;
@@ -59,13 +60,37 @@ public class DecisionTree extends Controller<MOVE> {
         }
         // 4. En otro caso:
         else {
-            // 1. Aplicar el método de selección de atributos sobre los datos y la lista de atributos, para
+            // 4.1. Aplicar el método de selección de atributos sobre los datos y la lista de atributos, para
             // encontrar el mejor atributo actual A: S(D, lista de atributos) -> A.
             SelectorAtributos selector = new ID3();
             String mejorAtributo = selector.seleccionDeAtributos(dataset, attrList);
 
+            // 4.2. Etiquetar a N como A y eliminar A de la lista de atributos.
+            node = new Node(mejorAtributo);
+            attrList.remove(mejorAtributo);
+
+            // 4.3. Para cada valor aj del atributo A:
+            //ArrayList<String> bestAttributeValues = this.attributesValues.get(mejorAtributo);
+            HashMap<String, Integer> map =  dataset.attributesWithValuesAndCounts.get(mejorAtributo);
+            List<String> bestAttributeValues = new ArrayList (map.keySet());
+            System.out.println("HOLAAA");
+            for(String value: bestAttributeValues) {
+                ArrayList<String> attributeListAux = (ArrayList) attrList.clone();;
+                //  a) Separar todas las tuplas en D para las cuales el atributo A toma el valor aj, creando el subconjunto de datos Dj.
+                Dataset subsetDj = dataset.getSubDataSetWithValue(mejorAtributo, value);
+                //  b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
+                if (subsetDj.dataset.isEmpty()) {
+                    Node child = new Node(getMayorityClass(dataset));
+                    node.nuevoHijo("value", child);
+                }
+                //  c) En otro caso, añadir a N el nodo hijo resultante de llamar a Generar_Arbol (Dj, lista de atributos).
+                else {
+                    node.nuevoHijo(value, generateTree(subsetDj, attributeListAux));
+                }
+            }
+            // 4.4 Return N.
+            return node;
         }
-        return null;
     }
 
     private boolean sameClass (Dataset D) {
@@ -75,12 +100,13 @@ public class DecisionTree extends Controller<MOVE> {
                 return false;
             }
         }
+        System.out.println("YO");
         return true;
     }
 
     private String getMayorityClass(Dataset D) {
         HashMap<String, Integer> mapStrategy = D.attributesWithValuesAndCounts.get(classDecisionTree);
-        List<String> valuesForStraytegy = (List<String>) mapStrategy.keySet();
+        List<String> valuesForStraytegy = new ArrayList<>(mapStrategy.keySet());
         String claseMayoritaria = "NONE";
         int max = 0;
         for(String value : valuesForStraytegy) {
