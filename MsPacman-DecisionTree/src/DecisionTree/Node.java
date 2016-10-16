@@ -27,7 +27,7 @@ public class Node {
     }
 
     public void nuevoHijo(String clase, Node nodo){
-        Node nuevoHijo = hijos.put(clase, nodo);
+        hijos.put(clase, nodo);
         if(this.esHoja) this.esHoja = false;
     }
 
