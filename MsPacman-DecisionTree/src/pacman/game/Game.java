@@ -1,17 +1,12 @@
 package pacman.game;
 
+import pacman.game.Constants.*;
+import pacman.game.internal.*;
+
 import java.util.BitSet;
 import java.util.EnumMap;
-import java.util.Random;
 import java.util.Map.Entry;
-import pacman.game.Constants.DM;
-import pacman.game.Constants.MOVE;
-import pacman.game.Constants.STRATEGY;
-import pacman.game.internal.Ghost;
-import pacman.game.internal.Maze;
-import pacman.game.internal.Node;
-import pacman.game.internal.PacMan;
-import pacman.game.internal.PathsCache;
+import java.util.Random;
 
 import static pacman.game.Constants.*;
 
@@ -70,7 +65,6 @@ public final class Game
 
 	private Random rnd;
 	private long seed;
-	public STRATEGY strategy;
 
 	/////////////////////////////////////////////////////////////////////////////
 	///////////////////  Constructors and initialisers  /////////////////////////
@@ -390,7 +384,7 @@ public final class Game
 	 */
 	public void updatePacMan(MOVE pacManMove)
 	{
-		_updatePacMan(pacManMove);					//move pac-man		
+		_updatePacMan(pacManMove);					//move pac-man
 		_eatPill();									//eat a pill
 		_eatPowerPill();							//eat a power pill
 	}
@@ -427,7 +421,7 @@ public final class Game
 	 */
 	public void updateGame()
 	{
-		_feast();									//ghosts eat pac-man or vice versa		
+		_feast();									//ghosts eat pac-man or vice versa
 		_updateLairTimes();
 		_updatePacManExtraLife();
 
@@ -449,7 +443,7 @@ public final class Game
 	 */
 	public void updateGame(boolean feast,boolean updateLairTimes,boolean updateExtraLife,boolean updateTotalTime,boolean updateLevelTime)
 	{
-		if(feast) 			_feast();				//ghosts eat pac-man or vice versa		
+		if(feast) 			_feast();				//ghosts eat pac-man or vice versa
 		if(updateLairTimes) _updateLairTimes();
 		if(updateExtraLife) _updatePacManExtraLife();
 
@@ -786,7 +780,7 @@ public final class Game
 	}
 
 	/**
-	 * Checks whether the game is over or not: all lives are lost or 16 levels have been 
+	 * Checks whether the game is over or not: all lives are lost or 16 levels have been
 	 * played. The variable is set by the methods _feast() and _checkLevelState().
 	 *
 	 * @return true, if successful
@@ -1205,7 +1199,7 @@ public final class Game
 	}
 
 	/**
-	 * Gets the neighbouring nodes from the current node index excluding the node 
+	 * Gets the neighbouring nodes from the current node index excluding the node
 	 * that corresponds to the opposite of the last move made which is given as an argument.
 	 *
 	 * @param nodeIndex The current node index

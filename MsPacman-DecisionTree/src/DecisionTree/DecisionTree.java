@@ -5,13 +5,13 @@ import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 import dataRecording.Dataset;
 import pacman.controllers.Controller;
-import pacman.game.Constants.STRATEGY;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by ramonserranolopez on 6/10/16.
@@ -25,21 +25,16 @@ public class DecisionTree extends Controller<MOVE> {
 
     public DecisionTree() {
 
-        classDecisionTree = "strategy";
+        classDecisionTree = "DirectionChosen";
         dataset = new Dataset(DataSaverLoader.LoadPacManData());
         listAttibutes = new ArrayList<String> (dataset.attributesWithValuesAndCounts.keySet());
         listAttibutes.remove(classDecisionTree);
-    }
-
-    @Override
-    public MOVE getMove(Game game, long timeDue) {
-        return null;
+        System.out.printf("asdasd");
     }
 
     public void buildTree() {
         root = generateTree(dataset, (ArrayList<String>) listAttibutes);
     }
-
 
     //Genera el arbol de decisiones según el dataset y la lista de atributos.
     public Node generateTree(Dataset dataset, ArrayList<String> attrList){
@@ -49,7 +44,8 @@ public class DecisionTree extends Controller<MOVE> {
 
         // 2. Si las tuplas en D tienen todas la misma clase C, return N como un nodo hoja etiquetado con la clase C.
         if(sameClass(dataset)){
-            node = new Node(dataset.dataset.get(0).strategy.toString());
+            String valorClase = dataset.dataset.get(0).DirectionChosen.toString();
+            node = new Node(valorClase);
             return node;
         }
         // 3. En otro caso, si la lista de atributos está vacía, return N como un nodo hoja etiquetado con la clase mayoritaria en D.
@@ -73,7 +69,6 @@ public class DecisionTree extends Controller<MOVE> {
             //ArrayList<String> bestAttributeValues = this.attributesValues.get(mejorAtributo);
             HashMap<String, Integer> map =  dataset.attributesWithValuesAndCounts.get(mejorAtributo);
             List<String> bestAttributeValues = new ArrayList (map.keySet());
-            System.out.println("HOLAAA");
             for(String value: bestAttributeValues) {
                 ArrayList<String> attributeListAux = (ArrayList) attrList.clone();;
                 //  a) Separar todas las tuplas en D para las cuales el atributo A toma el valor aj, creando el subconjunto de datos Dj.
@@ -81,7 +76,7 @@ public class DecisionTree extends Controller<MOVE> {
                 //  b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
                 if (subsetDj.dataset.isEmpty()) {
                     Node child = new Node(getMayorityClass(dataset));
-                    node.nuevoHijo("value", child);
+                    node.nuevoHijo(value, child);
                 }
                 //  c) En otro caso, añadir a N el nodo hijo resultante de llamar a Generar_Arbol (Dj, lista de atributos).
                 else {
@@ -94,9 +89,9 @@ public class DecisionTree extends Controller<MOVE> {
     }
 
     private boolean sameClass (Dataset D) {
-        STRATEGY str = D.dataset.get(0).strategy;
+        MOVE str = D.dataset.get(0).DirectionChosen;
         for (DataTuple tuple : D.dataset) {
-            if (tuple.strategy != str) {
+            if (tuple.DirectionChosen != str) {
                 return false;
             }
         }
@@ -117,5 +112,28 @@ public class DecisionTree extends Controller<MOVE> {
         }
 
         return claseMayoritaria;
+    }
+
+    public MOVE buscarRecursivo(Node node, DataTuple game){
+        MOVE move = null;
+        if(node.esHoja())
+            move = MOVE.valueOf(node.getClase());
+        else {
+            String valueNode = game.discretize(node.getClase());
+            TreeMap tree = node.getHijos();
+            Node nextNode = (Node) tree.get(valueNode);
+            move = buscarRecursivo(nextNode, game);
+        }
+        return move;
+    }
+
+    public MOVE buscar(Game game){
+        DataTuple actualGame = new DataTuple(game, null);
+        return buscarRecursivo(root, actualGame);
+    }
+
+    @Override
+    public MOVE getMove(Game game, long timeDue) {
+        return buscar(game);
     }
 }

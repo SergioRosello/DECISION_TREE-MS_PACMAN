@@ -1,13 +1,12 @@
 package pacman.controllers.examples;
 
 import pacman.controllers.Controller;
-import java.util.ArrayList;
-import pacman.controllers.Controller;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
-import static pacman.game.Constants.*;
+
+import java.util.ArrayList;
 
 
 /*
@@ -26,7 +25,7 @@ public class KillerPacman extends Controller<MOVE> {
         for(GHOST ghost : GHOST.values())
             if(game.getGhostEdibleTime(ghost)==0 && game.getGhostLairTime(ghost)==0)
                 if(game.getShortestPathDistance(current,game.getGhostCurrentNodeIndex(ghost))<MIN_DISTANCE) {
-                    game.strategy = STRATEGY.RUNAWAY;
+                    //game.strategy = STRATEGY.RUNAWAY;
                     return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(ghost),DM.PATH);
                 }
 
@@ -48,7 +47,7 @@ public class KillerPacman extends Controller<MOVE> {
 
         if(minGhost!=null)	//we found an edible ghost
         {
-            game.strategy = STRATEGY.CHASE;
+            //game.strategy = STRATEGY.CHASE;
             return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(minGhost),DM.PATH);
         }
 
@@ -72,7 +71,7 @@ public class KillerPacman extends Controller<MOVE> {
             targetsArray[i]=targets.get(i);
 
         //return the next direction once the closest target has been identified
-        game.strategy = STRATEGY.EATPILLS;
+        //game.strategy = STRATEGY.EATPILLS;
         return game.getNextMoveTowardsTarget(current,game.getClosestNodeIndexFromNodeIndex(current,targetsArray,DM.PATH),DM.PATH);
     }
 

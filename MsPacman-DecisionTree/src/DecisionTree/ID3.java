@@ -1,8 +1,6 @@
 package DecisionTree;
 
-import dataRecording.DataTuple;
 import dataRecording.Dataset;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +13,7 @@ public class ID3 extends SelectorAtributos {
     @Override
     public String seleccionDeAtributos(Dataset dataset, List<String> attrList) {
         String res = null;
-        float infoD = entropy(dataset, "strategy");
+        float infoD = entropy(dataset, "DirectionChosen");
 
         ArrayList<Float> infoA = new ArrayList<Float>();
         ArrayList<Float> gainA = new ArrayList<Float>();

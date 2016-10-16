@@ -7,7 +7,6 @@ import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class DataTuple {
 
@@ -71,7 +70,7 @@ public class DataTuple {
 			move = game.getPacmanLastMoveMade();
 		}
 
-		this.strategy = game.strategy;
+		//this.strategy = game.strategy;
 
 		this.DirectionChosen = move;
 		this.mazeIndex = game.getMazeIndex();
@@ -117,10 +116,10 @@ public class DataTuple {
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
 
-		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
+		//this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
 
-		/*this.DirectionChosen = MOVE.valueOf(dataSplit[1]);
-		this.mazeIndex = Integer.parseInt(dataSplit[2]);
+		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
+		/*this.mazeIndex = Integer.parseInt(dataSplit[2]);
 		this.currentLevel = Integer.parseInt(dataSplit[3]);
 		this.pacmanPosition = Integer.parseInt(dataSplit[4]);
 		this.pacmanLivesLeft = Integer.parseInt(dataSplit[5]);
@@ -149,9 +148,9 @@ public class DataTuple {
 	public String getSaveString() {
 		StringBuilder stringbuilder = new StringBuilder();
 
-		stringbuilder.append(this.strategy + ";");
+		//stringbuilder.append(this.strategy + ";");
 
-		//stringbuilder.append(this.DirectionChosen + ";");
+		stringbuilder.append(this.DirectionChosen + ";");
 		//stringbuilder.append(this.mazeIndex + ";");
 		//stringbuilder.append(this.currentLevel + ";");
 		//stringbuilder.append(this.pacmanPosition + ";");
@@ -280,8 +279,10 @@ public class DataTuple {
 
 	public String discretize(String attrName) {
 		switch (attrName) {
+			case "DirectionChosen":
+				return this.DirectionChosen.toString();
 			case "strategy":
-				return strategy.toString();
+				return this.strategy.toString();
             case "numOfPillsLeft":
                 return discretizeNumberOfPills(this.numOfPillsLeft).toString();
             case "numOfPowerPillsLeft":
@@ -311,7 +312,7 @@ public class DataTuple {
 
 		if (this.hash == null) {
             hash = new HashMap<>();
-            String[] attrs = {"strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible", "isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist"};
+            String[] attrs = {"DirectionChosen", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible", "isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist"};
             for (String attr : attrs) {
                 this.hash.put(attr, discretize(attr));
             }

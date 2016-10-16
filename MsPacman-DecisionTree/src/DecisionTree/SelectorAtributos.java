@@ -1,14 +1,10 @@
 package DecisionTree;
 
-import dataRecording.DataTuple;
 import dataRecording.Dataset;
-import pacman.game.Constants.STRATEGY;
 
-import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by ramonserranolopez on 15/10/16.
@@ -46,7 +42,7 @@ public abstract  class SelectorAtributos {
             Dataset dt = dataset.getSubDataSetWithValue(attribute, value);
             float sizeDataset = dataset.dataset.size();
             float subDataset = dt.dataset.size();
-            info += (subDataset / sizeDataset) * entropy(dt, "strategy");
+            info += (subDataset / sizeDataset) * entropy(dt, "DirectionChosen");
         }
         return info;
     }
