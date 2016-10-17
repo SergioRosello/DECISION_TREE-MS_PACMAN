@@ -150,10 +150,10 @@ public class DecisionTree extends Controller<MOVE> {
                     int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), pillIndex);
                     if(distance < minDistP) {
                         minDistP = distance;
-                        pildoraAComer = game.getPillIndex(pillIndex);
+                        pildoraAComer = pillIndex;
                     }
                 }
-                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getPillIndex(pildoraAComer), Constants.DM.PATH);
+                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), pildoraAComer, Constants.DM.PATH);
             case CHASE:
                 int minDistGChase = Integer.MAX_VALUE;
                 GHOST ghostAPerseguir = null;

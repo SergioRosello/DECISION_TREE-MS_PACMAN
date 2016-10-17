@@ -1,13 +1,14 @@
 package pacman.controllers.examples;
 
 import pacman.controllers.Controller;
-import java.util.ArrayList;
-import pacman.controllers.Controller;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
-import static pacman.game.Constants.*;
+
+import java.util.ArrayList;
+
+import static pacman.game.Constants.STRATEGY;
 
 
 /*
@@ -15,7 +16,7 @@ import static pacman.game.Constants.*;
  */
 public class KillerPacman extends Controller<MOVE> {
 
-    private static final int MIN_DISTANCE=10;	//if a ghost is this close, run away
+    private static final int MIN_DISTANCE=25;	//if a ghost is this close, run away
 
     @Override
     public MOVE getMove(Game game,long timeDue)
