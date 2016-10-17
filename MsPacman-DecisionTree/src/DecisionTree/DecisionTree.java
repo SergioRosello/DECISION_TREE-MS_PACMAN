@@ -5,13 +5,16 @@ import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 import dataRecording.Dataset;
 import pacman.controllers.Controller;
-import pacman.game.Constants.STRATEGY;
+import pacman.game.Constants;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import pacman.game.Constants.STRATEGY;
 import pacman.game.Game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by ramonserranolopez on 6/10/16.
@@ -31,15 +34,9 @@ public class DecisionTree extends Controller<MOVE> {
         listAttibutes.remove(classDecisionTree);
     }
 
-    @Override
-    public MOVE getMove(Game game, long timeDue) {
-        return null;
-    }
-
     public void buildTree() {
         root = generateTree(dataset, (ArrayList<String>) listAttibutes);
     }
-
 
     //Genera el arbol de decisiones según el dataset y la lista de atributos.
     public Node generateTree(Dataset dataset, ArrayList<String> attrList){
@@ -73,7 +70,6 @@ public class DecisionTree extends Controller<MOVE> {
             //ArrayList<String> bestAttributeValues = this.attributesValues.get(mejorAtributo);
             HashMap<String, Integer> map =  dataset.attributesWithValuesAndCounts.get(mejorAtributo);
             List<String> bestAttributeValues = new ArrayList (map.keySet());
-            System.out.println("HOLAAA");
             for(String value: bestAttributeValues) {
                 ArrayList<String> attributeListAux = (ArrayList) attrList.clone();;
                 //  a) Separar todas las tuplas en D para las cuales el atributo A toma el valor aj, creando el subconjunto de datos Dj.
@@ -81,13 +77,17 @@ public class DecisionTree extends Controller<MOVE> {
                 //  b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
                 if (subsetDj.dataset.isEmpty()) {
                     Node child = new Node(getMayorityClass(dataset));
-                    node.nuevoHijo("value", child);
+                    node.nuevoHijo(value, child);
                 }
                 //  c) En otro caso, añadir a N el nodo hijo resultante de llamar a Generar_Arbol (Dj, lista de atributos).
                 else {
                     node.nuevoHijo(value, generateTree(subsetDj, attributeListAux));
                 }
             }
+            // b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D. para valores no definidos en
+            // el dataset de entrenamiento
+            Node defaultNode = new Node(getMayorityClass(dataset));
+            node.nuevoHijo("default", defaultNode);
             // 4.4 Return N.
             return node;
         }
@@ -100,7 +100,6 @@ public class DecisionTree extends Controller<MOVE> {
                 return false;
             }
         }
-        System.out.println("YO");
         return true;
     }
 
@@ -117,5 +116,71 @@ public class DecisionTree extends Controller<MOVE> {
         }
 
         return claseMayoritaria;
+    }
+
+    public STRATEGY buscarRecursivo(Node node, DataTuple game){
+        STRATEGY strategy = null;
+        if(node.esHoja())
+            strategy = STRATEGY.valueOf(node.getClase());
+        else {
+            String valueNode = game.discretize(node.getClase());
+            TreeMap tree = node.getHijos();
+            Node nextNode = (Node) tree.get(valueNode);
+            if(nextNode == null) {
+                nextNode = (Node) tree.get("default");
+            }
+            strategy = buscarRecursivo(nextNode, game);
+        }
+        return strategy;
+    }
+
+    public STRATEGY buscar(Game game){
+        DataTuple actualGame = new DataTuple(game, null);
+        return buscarRecursivo(root, actualGame);
+    }
+
+    @Override
+    public MOVE getMove(Game game, long timeDue) {
+        switch (buscar(game)) {
+            case EATPILLS:
+                int pillsIndex[] = game.getPillIndices();
+                int minDistP = Integer.MAX_VALUE;
+                int pildoraAComer = 0;
+                for (int pillIndex : pillsIndex) {
+                    int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), pillIndex);
+                    if(distance < minDistP) {
+                        minDistP = distance;
+                        pildoraAComer = game.getPillIndex(pillIndex);
+                    }
+                }
+                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getPillIndex(pildoraAComer), Constants.DM.PATH);
+            case CHASE:
+                int minDistGChase = Integer.MAX_VALUE;
+                GHOST ghostAPerseguir = null;
+
+                for (GHOST ghost : GHOST.values()) {
+                    int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost));
+                    if(distance < minDistGChase)  {
+                        minDistGChase = distance;
+                        ghostAPerseguir = ghost;
+                    }
+                }
+
+                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(ghostAPerseguir), Constants.DM.PATH);
+            case RUNAWAY:
+                int minDistGRunAway = Integer.MAX_VALUE;
+                GHOST ghostDelQueHuir = null;
+
+                for (GHOST ghost : GHOST.values()) {
+                    int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost));
+                    if(distance < minDistGRunAway)  {
+                        minDistGRunAway = distance;
+                        ghostDelQueHuir = ghost;
+                    }
+                }
+                return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostDelQueHuir), Constants.DM.PATH);
+            default:
+                return MOVE.NEUTRAL;
+        }
     }
 }
