@@ -143,17 +143,25 @@ public class DecisionTree extends Controller<MOVE> {
     public MOVE getMove(Game game, long timeDue) {
         switch (buscar(game)) {
             case EATPILLS:
-                int pillsIndex[] = game.getPillIndices();
-                int minDistP = Integer.MAX_VALUE;
-                int pildoraAComer = 0;
-                for (int pillIndex : pillsIndex) {
-                    int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), pillIndex);
-                    if(distance < minDistP) {
-                        minDistP = distance;
-                        pildoraAComer = pillIndex;
-                    }
-                }
-                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), pildoraAComer, Constants.DM.PATH);
+                int[] pills=game.getPillIndices();
+                int[] powerPills=game.getPowerPillIndices();
+
+                ArrayList<Integer> targets=new ArrayList<Integer>();
+
+                for(int i=0;i<pills.length;i++)
+                    if(game.isPillStillAvailable(i))
+                        targets.add(pills[i]);
+
+                for(int i=0;i<powerPills.length;i++)
+                    if(game.isPowerPillStillAvailable(i))
+                        targets.add(powerPills[i]);
+
+                int[] targetsArray=new int[targets.size()];
+
+                for(int i=0;i<targetsArray.length;i++)
+                    targetsArray[i]=targets.get(i);
+
+                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),targetsArray, Constants.DM.PATH), Constants.DM.PATH);
             case CHASE:
                 int minDistGChase = Integer.MAX_VALUE;
                 GHOST ghostAPerseguir = null;
@@ -178,6 +186,7 @@ public class DecisionTree extends Controller<MOVE> {
                         ghostDelQueHuir = ghost;
                     }
                 }
+
                 return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostDelQueHuir), Constants.DM.PATH);
             default:
                 return MOVE.NEUTRAL;
