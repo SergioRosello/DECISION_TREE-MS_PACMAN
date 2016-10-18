@@ -1,8 +1,6 @@
 package DecisionTree;
 
-import dataRecording.DataTuple;
 import dataRecording.Dataset;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,26 +11,18 @@ import java.util.List;
 public class ID3 extends SelectorAtributos {
 
     @Override
-    public String seleccionDeAtributos(Dataset dataset, List<String> attrList) {
+    public String seleccionDeAtributos(Dataset dataset, List<String> attributeList) {
         String res = null;
-        float infoD = entropy(dataset, "strategy");
+        float infoD = entropia(dataset, "strategy");
 
-        ArrayList<Float> infoA = new ArrayList<Float>();
         ArrayList<Float> gainA = new ArrayList<Float>();
 
-        //calcular infoA
-        for (String attr : attrList) {
-            float auxInfoA = infoA(dataset, attr);
-            infoA.add(auxInfoA);
-        }
-
-        //calcular gainA
-        for (int i = 0; i < infoA.size(); i++) {
-            float ganancia = infoD - infoA.get(i);
+        for (String attr : attributeList) {
+            float infoADAux = infoAD(dataset, attr);
+            float ganancia = infoD - infoADAux;
             gainA.add(ganancia);
         }
 
-        //conseguir mas alto
         float max = 0;
         int posMax = 0;
 
@@ -43,7 +33,7 @@ public class ID3 extends SelectorAtributos {
             }
         }
 
-        res = attrList.get(posMax);
+        res = attributeList.get(posMax);
         return res;
     }
 }
