@@ -23,16 +23,13 @@ public class Dataset {
     public Dataset getSubDataSetWithValue(String attribute, String value) {
 
         ArrayList<DataTuple> newDataset = new ArrayList<DataTuple>();
-        //subDataset.sadasd.remove(aatr);
 
         for (DataTuple tuple : dataset) {
             if (tuple.discretize(attribute).equals(value)) {
                 newDataset.add(tuple);
             }
         }
-        Dataset subDataset = new Dataset(newDataset);
-
-        return subDataset;
+        return new Dataset(newDataset);
     }
 
 
@@ -55,16 +52,5 @@ public class Dataset {
                 }
             }
         }
-    }
-
-    // Contar el numero de veces que aparece la tupla con el mismo valor
-
-    //Dataset dataset = new Dataset(DataSaverLoader.LoadPacManData());
-    // subDataset.getSubDataSetWithValue("asdas", "dadas");
-
-    public static void main(String[] args) {
-        Dataset dataset = new Dataset(DataSaverLoader.LoadPacManData());
-        Dataset subdataset = dataset.getSubDataSetWithValue("blinkyDist", "HIGH");
-        System.out.println("Hey");
     }
 }

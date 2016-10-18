@@ -16,18 +16,17 @@ public class Node {
     private TreeMap<String, Node> hijos;
 
 
-    private boolean esRaiz, esHoja;
+    private boolean esHoja;
 
     //Constructor de la clase Node.
     public Node(String clase){
         this.clase = clase;
         this.hijos = new TreeMap<String, Node>();
-        this.esRaiz = false;
         this.esHoja = true;
     }
 
     public void nuevoHijo(String clase, Node nodo){
-        Node nuevoHijo = hijos.put(clase, nodo);
+        hijos.put(clase, nodo);
         if(this.esHoja) this.esHoja = false;
     }
 
@@ -41,9 +40,6 @@ public class Node {
     }
 
     //Checkers...
-    public boolean esRaiz() {
-        return this.esRaiz;
-    }
 
     public boolean esHoja() {
         return this.esHoja;
