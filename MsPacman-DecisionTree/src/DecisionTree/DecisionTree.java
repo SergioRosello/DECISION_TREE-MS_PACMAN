@@ -39,7 +39,7 @@ public class DecisionTree extends Controller<MOVE> {
     }
 
     //Genera el arbol de decisiones según el dataset y la lista de atributos.
-    public Node generateTree(Dataset dataset, ArrayList<String> attrList){
+    public Node generateTree(Dataset dataset, ArrayList<String> attributeList){
 
         // 1. Se crea el nodo N.
         Node node = null;
@@ -50,7 +50,7 @@ public class DecisionTree extends Controller<MOVE> {
             return node;
         }
         // 3. En otro caso, si la lista de atributos está vacía, return N como un nodo hoja etiquetado con la clase mayoritaria en D.
-        else if(attrList.isEmpty()){
+        else if(attributeList.isEmpty()){
             String claseMayoritaria = getMayorityClass(dataset);
             node = new Node(claseMayoritaria);
             return node;
@@ -60,18 +60,18 @@ public class DecisionTree extends Controller<MOVE> {
             // 4.1. Aplicar el método de selección de atributos sobre los datos y la lista de atributos, para
             // encontrar el mejor atributo actual A: S(D, lista de atributos) -> A.
             SelectorAtributos selector = new ID3();
-            String mejorAtributo = selector.seleccionDeAtributos(dataset, attrList);
+            String mejorAtributo = selector.seleccionDeAtributos(dataset, attributeList);
 
             // 4.2. Etiquetar a N como A y eliminar A de la lista de atributos.
             node = new Node(mejorAtributo);
-            attrList.remove(mejorAtributo);
+            attributeList.remove(mejorAtributo);
 
             // 4.3. Para cada valor aj del atributo A:
             //ArrayList<String> bestAttributeValues = this.attributesValues.get(mejorAtributo);
             HashMap<String, Integer> map =  dataset.attributesWithValuesAndCounts.get(mejorAtributo);
             List<String> bestAttributeValues = new ArrayList (map.keySet());
             for(String value: bestAttributeValues) {
-                ArrayList<String> attributeListAux = (ArrayList) attrList.clone();;
+                ArrayList<String> attributeListAux = (ArrayList) attributeList.clone();;
                 //  a) Separar todas las tuplas en D para las cuales el atributo A toma el valor aj, creando el subconjunto de datos Dj.
                 Dataset subsetDj = dataset.getSubDataSetWithValue(mejorAtributo, value);
                 //  b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
