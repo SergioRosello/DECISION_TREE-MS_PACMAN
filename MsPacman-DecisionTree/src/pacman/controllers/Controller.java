@@ -16,6 +16,8 @@ public abstract class Controller<T> implements Runnable
 	private volatile boolean threadStillRunning;
 	private long timeDue;
 	private Game game;
+	//variable used to record the number of correct decisions a controller has in relation to another controller.
+	public float numberOfCorrectDecisions = 0;
 	protected T lastMove;	//this is now protected. You can set this directly in your getMove() method to save an immediate response.
 
 	/**

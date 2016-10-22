@@ -80,7 +80,7 @@ public class Executor
 
         exec.runGameTimed(decisionTree, new StarterGhosts(), visual);
         //exec.runGameTimed(new KillerPacman() ,new StarterGhosts(),visual);
-
+        
     }
 
     /**
@@ -189,6 +189,9 @@ public class Executor
             if(visual)
                 gv.repaint();
         }
+
+        //Calculates the percentage of correct decisions of the decisionTree compared with that of the controller at the time.
+        System.out.println("Porcentaje aciertos: " + game.calculatePercentageOfGoodDecisions(pacManController.numberOfCorrectDecisions) + "%");
 
         pacManController.terminate();
         ghostController.terminate();

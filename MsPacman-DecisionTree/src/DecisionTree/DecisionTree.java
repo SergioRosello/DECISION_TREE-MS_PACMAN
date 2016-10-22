@@ -5,6 +5,7 @@ import dataRecording.DataSaverLoader;
 import dataRecording.DataTuple;
 import dataRecording.Dataset;
 import pacman.controllers.Controller;
+import pacman.controllers.examples.KillerPacman;
 import pacman.game.Constants;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -141,7 +142,16 @@ public class DecisionTree extends Controller<MOVE> {
 
     @Override
     public MOVE getMove(Game game, long timeDue) {
+        //Inicializacion de killerPacMan para comparar nuestro decisionTree con el killerPacMan.
+        MOVE killerPacManResult;
+        KillerPacman killerPacman = new KillerPacman();
+        killerPacManResult = killerPacman.getMove(game, timeDue);
+
+        //Calculates decisionTree-based nextMove.
+        MOVE nextMove;
+
         switch (buscar(game)) {
+
             case EATPILLS:
                 int[] pills=game.getPillIndices();
                 int[] powerPills=game.getPowerPillIndices();
@@ -161,7 +171,10 @@ public class DecisionTree extends Controller<MOVE> {
                 for(int i=0;i<targetsArray.length;i++)
                     targetsArray[i]=targets.get(i);
 
-                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),targetsArray, Constants.DM.PATH), Constants.DM.PATH);
+                nextMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),targetsArray, Constants.DM.PATH), Constants.DM.PATH);
+                if (killerPacManResult == nextMove) numberOfCorrectDecisions++;
+                else System.err.println("Didnt make the same decision as KillerPacMan, KillerPacMan chose: " + killerPacManResult.toString());
+                return nextMove;
             case CHASE:
                 int minDistGChase = Integer.MAX_VALUE;
                 GHOST ghostAPerseguir = null;
@@ -174,7 +187,9 @@ public class DecisionTree extends Controller<MOVE> {
                     }
                 }
 
-                return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(ghostAPerseguir), Constants.DM.PATH);
+                nextMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(ghostAPerseguir), Constants.DM.PATH);
+                if (killerPacManResult == nextMove) numberOfCorrectDecisions++;
+                return nextMove;
             case RUNAWAY:
                 int minDistGRunAway = Integer.MAX_VALUE;
                 GHOST ghostDelQueHuir = null;
@@ -187,7 +202,9 @@ public class DecisionTree extends Controller<MOVE> {
                     }
                 }
 
-                return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostDelQueHuir), Constants.DM.PATH);
+                nextMove = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostDelQueHuir), Constants.DM.PATH);
+                if (killerPacManResult == nextMove) numberOfCorrectDecisions++;
+                return nextMove;
             default:
                 return MOVE.NEUTRAL;
         }

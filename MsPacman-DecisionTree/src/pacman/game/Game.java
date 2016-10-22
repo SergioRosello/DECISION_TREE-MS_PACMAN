@@ -1667,4 +1667,11 @@ public final class Game
 
 		return caches[mazeIndex].getPathDistanceFromA2B(fromNodeIndex,toNodeIndex,lastMoveMade);
 	}
+
+
+	//Calculates the percentege of good decisions compared to another controller.
+	public float calculatePercentageOfGoodDecisions(float numberOfCorrectDecisions){
+		float percentage = (numberOfCorrectDecisions / this.getCurrentLevelTime())*100;
+		return percentage;
+	}
 }
