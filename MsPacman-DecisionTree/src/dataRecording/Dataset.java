@@ -20,6 +20,8 @@ public class Dataset {
 
 
     // Crear un subdataset con aquellas tuplas que contegan el mismo valor para un atributo
+    //Eg. Attribute: isPinkyEdible  Value: false.
+    //Crea un dataset en el que isPinkyEdible es false.
     public Dataset getSubDataSetWithValue(String attribute, String value) {
 
         ArrayList<DataTuple> newDataset = new ArrayList<DataTuple>();

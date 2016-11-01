@@ -121,9 +121,12 @@ public class DecisionTree extends Controller<MOVE> {
 
     public STRATEGY buscarRecursivo(Node node, DataTuple game){
         STRATEGY strategy = null;
+        //Si el nodo es hoja, la estrategia es la clase de ese mismo nodo.
         if(node.esHoja())
             strategy = STRATEGY.valueOf(node.getClase());
+        //
         else {
+            //Calculamos el valor actual del nodo (su clase)
             String valueNode = game.discretize(node.getClase());
             TreeMap tree = node.getHijos();
             Node nextNode = (Node) tree.get(valueNode);
@@ -138,6 +141,10 @@ public class DecisionTree extends Controller<MOVE> {
     public STRATEGY buscar(Game game){
         DataTuple actualGame = new DataTuple(game, null);
         return buscarRecursivo(root, actualGame);
+    }
+
+    private void postPoda(){
+
     }
 
     @Override
