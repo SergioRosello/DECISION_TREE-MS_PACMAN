@@ -45,12 +45,14 @@ public class DecisionTree extends Controller<MOVE> {
         // 1. Se crea el nodo N.
         Node node = null;
 
-        // 2. Si las tuplas en D tienen todas la misma clase C, return N como un nodo hoja etiquetado con la clase C.
+        // 2. Si las tuplas en D tienen todas la misma clase C, return N
+        // como un nodo hoja etiquetado con la clase C.
         if(sameClass(dataset)){
             node = new Node(dataset.dataset.get(0).strategy.toString());
             return node;
         }
-        // 3. En otro caso, si la lista de atributos está vacía, return N como un nodo hoja etiquetado con la clase mayoritaria en D.
+        // 3. En otro caso, si la lista de atributos está vacía, return N
+        // como un nodo hoja etiquetado con la clase mayoritaria en D.
         else if(attributeList.isEmpty()){
             String claseMayoritaria = getMayorityClass(dataset);
             node = new Node(claseMayoritaria);
@@ -68,12 +70,14 @@ public class DecisionTree extends Controller<MOVE> {
             attributeList.remove(mejorAtributo);
 
             // 4.3. Para cada valor aj del atributo A:
-            //ArrayList<String> bestAttributeValues = this.attributesValues.get(mejorAtributo);
+            //eg: atributo A = isInkyEdible y sus valores son: true y false
             HashMap<String, Integer> map =  dataset.attributesWithValuesAndCounts.get(mejorAtributo);
+            //Guardamos sus valores. (Aj)
             List<String> bestAttributeValues = new ArrayList (map.keySet());
             for(String value: bestAttributeValues) {
-                ArrayList<String> attributeListAux = (ArrayList) attributeList.clone();;
-                //  a) Separar todas las tuplas en D para las cuales el atributo A toma el valor aj, creando el subconjunto de datos Dj.
+                ArrayList<String> attributeListAux = (ArrayList) attributeList.clone();
+                //  a) Separar todas las tuplas en D para las cuales el atributo A toma
+                // el valor aj, creando el subconjunto de datos Dj.
                 Dataset subsetDj = dataset.getSubDataSetWithValue(mejorAtributo, value);
                 //  b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
                 if (subsetDj.dataset.isEmpty()) {
@@ -85,8 +89,8 @@ public class DecisionTree extends Controller<MOVE> {
                     node.nuevoHijo(value, generateTree(subsetDj, attributeListAux));
                 }
             }
-            // b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D. para valores no definidos en
-            // el dataset de entrenamiento
+            // b) Si Dj está vacío, añadir a N un nodo hoja etiquetado con la clase mayoritaria en D.
+            // Para valores no definidos en el dataset de entrenamiento
             Node defaultNode = new Node(getMayorityClass(dataset));
             node.nuevoHijo("default", defaultNode);
             // 4.4 Return N.
